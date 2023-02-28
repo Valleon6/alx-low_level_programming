@@ -1,27 +1,24 @@
 #include "main.h"
 
 /**
- * print_array - function entry point
- * Description - function that prints n elements of
- * an array of integers, followed by a new line.
- * @a: array pointer input
- * @n: int input
+ * *_strcpy - function entry point
+ * Description - a function that copies the string pointed to by src
+ * @dest: input
+ * @src: input
+ * Return: a pointer to `dest`
  */
 
-void print_array(int *a, int n)
+char *_strcpy(char *dest, char *src)
 {
 	int len;
 
 	len = 0;
 
-	for (n--; n >= 0; n--, len++)
+	for (; src[len] != '\0'; len++)
 	{
-		printf("%d", a[len]);
-
-		if (n > 0)
-		{
-			printf(", ");
-		}
+		dest[len] = src[len];
 	}
-	printf("\n");
+	dest[len] = '\0';
+
+	return (dest);
 }
