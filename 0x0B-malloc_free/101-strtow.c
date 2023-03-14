@@ -1,47 +1,77 @@
-#include "main.h"
 #include <stdlib.h>
-#include <stdio.h>
+#include "main.h"
+
 /**
- * _realloc - reallocates old to new, set conditions from problem
- * returning dest w/ size of malloc new_size, set src as ptr
- * @ptr: pointer to memory prev alloc, must free end
- * @old_size: input old
- * @new_size: input new
- * Return: 0
+ * count_word - helper function to count the number of words in a string
+ * @s: string to evaluate
+ *
+ * Return: number of words
  */
-void *_realloc(void *ptr, unsigned int old_size, unsigned int new_size)
+int count_word(char *s)
 {
-	char *dest, *src;
-	unsigned int i;
+	int flag, c, w;
 
-	if (new_size == old_size)
-		return (ptr);
+	flag = 0;
+	w = 0;
 
-	if (ptr == NULL)
+	for (c = 0; s[c] != '\0'; c++)
 	{
-		ptr = malloc(new_size);
-		if (ptr == NULL)
+		if (s[c] == ' ')
+			flag = 0;
+		else if (flag == 0)
 		{
-			return (NULL);
+			flag = 1;
+			w++;
 		}
-		return (ptr);
 	}
 
-	if (new_size == 0 && ptr != NULL)
+	return (w);
+}
+/**
+ * **strtow - splits a string into words
+ * @str: string to split
+ *
+ * Return: pointer to an array of strings (Success)
+ * or NULL (Error)
+ */
+char **strtow(char *str)
+{
+	char **matrix, *tmp;
+	int i, k = 0, len = 0, words, c = 0, start, end;
+
+	while (*(str + len))
+		len++;
+	words = count_word(str);
+	if (words == 0)
+		return (NULL);
+
+	matrix = (char **) malloc(sizeof(char *) * (words + 1));
+	if (matrix == NULL)
+		return (NULL);
+
+	for (i = 0; i <= len; i++)
 	{
-		free(ptr);
-		return (NULL);
+		if (str[i] == ' ' || str[i] == '\0')
+		{
+			if (c)
+			{
+				end = i;
+				tmp = (char *) malloc(sizeof(char) * (c + 1));
+				if (tmp == NULL)
+					return (NULL);
+				while (start < end)
+					*tmp++ = str[start++];
+				*tmp = '\0';
+				matrix[k] = tmp - c;
+				k++;
+				c = 0;
+			}
+		}
+		else if (c++ == 0)
+			start = i;
 	}
 
-	dest = malloc(new_size);
-	if (dest == NULL)
-		return (NULL);
+	matrix[k] = NULL;
 
-	src = ptr;
-
-	for (i = 0; i < new_size && i < old_size; i++)
-		dest[i] = src[i];
-	free(ptr);
-
-	return (dest);
+	return (matrix);
 }
